@@ -6,9 +6,20 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="sue-woods-park" />
+        <module name="sue-rabbitmq-task" />
+        <module name="sue-rabbitmq-core-producer" />
+        <module name="sue-rabbitmq-common" />
+        <module name="sue-rabbitmq-api" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="8" />
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="sue-rabbitmq-api" options="-parameters" />
+      <module name="sue-rabbitmq-common" options="-parameters" />
+      <module name="sue-rabbitmq-core-producer" options="-parameters" />
+      <module name="sue-rabbitmq-task" options="-parameters" />
+    </option>
   </component>
 </project>
