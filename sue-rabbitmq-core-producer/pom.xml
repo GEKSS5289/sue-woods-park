@@ -12,4 +12,11 @@
     <artifactId>sue-rabbit-core-producer</artifactId>
 
 
+    <dependencies>
+        <dependency>
+            <groupId>com.sue</groupId>
+            <artifactId>sue-rabbitmq-common</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
 </project>

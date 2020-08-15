@@ -3,7 +3,6 @@ package com.sue.rabbit.entity.builder;
 import com.sue.rabbit.constant.MessageType;
 import com.sue.rabbit.entity.Message;
 import com.sue.rabbit.exception.MessageRunTimeException;
-import com.sun.xml.internal.ws.api.model.MEP;
 
 import java.util.HashMap;
 import java.util.Map;
