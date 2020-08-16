@@ -3,6 +3,11 @@ package com.sue.rabbit.producer.broker;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Maps;
+import com.sue.rabbit.common.convert.GenericMessageConverter;
+import com.sue.rabbit.common.convert.RabbitMessageConvert;
+import com.sue.rabbit.common.serializer.Serializer;
+import com.sue.rabbit.common.serializer.SerializerFactory;
+import com.sue.rabbit.common.serializer.impl.JacksonSerializerFactory;
 import com.sue.rabbit.constant.MessageType;
 import com.sue.rabbit.entity.Message;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +38,8 @@ public class RabbitTemplateContainer implements RabbitTemplate.ConfirmCallback {
 
     private Splitter splitter = Splitter.on("#");
 
+    private SerializerFactory serializerFactory = JacksonSerializerFactory.INSTANCE;
+
     @Autowired
     private ConnectionFactory connectionFactory;
 
@@ -50,9 +57,10 @@ public class RabbitTemplateContainer implements RabbitTemplate.ConfirmCallback {
         newRabbitTemplate.setRoutingKey(message.getRoutingKey());
 
         //对于message序列化方式
-
-
-
+        Serializer serializer = serializerFactory.create();
+        GenericMessageConverter genericMessageConverter = new GenericMessageConverter(serializer);
+        RabbitMessageConvert rabbitMessageConvert = new RabbitMessageConvert(genericMessageConverter);
+        newRabbitTemplate.setMessageConverter(rabbitMessageConvert);
 
         String messageType = message.getMessageType();
         if(!MessageType.RAPID.equals(messageType)){
