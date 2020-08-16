@@ -10,6 +10,7 @@ import com.sue.rabbit.common.serializer.SerializerFactory;
 import com.sue.rabbit.common.serializer.impl.JacksonSerializerFactory;
 import com.sue.rabbit.constant.MessageType;
 import com.sue.rabbit.entity.Message;
+import com.sue.rabbit.producer.service.MessageStoreService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.connection.CorrelationData;
@@ -39,6 +40,9 @@ public class RabbitTemplateContainer implements RabbitTemplate.ConfirmCallback {
     private Splitter splitter = Splitter.on("#");
 
     private SerializerFactory serializerFactory = JacksonSerializerFactory.INSTANCE;
+
+    @Autowired
+    private MessageStoreService messageStoreService;
 
     @Autowired
     private ConnectionFactory connectionFactory;
@@ -80,6 +84,8 @@ public class RabbitTemplateContainer implements RabbitTemplate.ConfirmCallback {
         long sendTime = Long.parseLong(strings.get(1));
 
         if(ack){
+            //当Broker 返回ack成功时，就更新一下日志表里对应的消息发送的状态为SEND_OK
+            this.messageStoreService.success(messageId);
             log.info("send message is OK confirm messageId:{},sendTime:{}",messageId,sendTime);
         }else{
             log.error("send message is Fail,confirm messageId:{},sendTime:{}",messageId,sendTime);

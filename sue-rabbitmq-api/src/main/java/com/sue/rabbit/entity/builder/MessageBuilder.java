@@ -70,8 +70,8 @@ public class MessageBuilder {
 
     public Message build(){
 
-        if(messageType == null){
-            messageType = UUID.randomUUID().toString();
+        if(messageId == null){
+            messageId = UUID.randomUUID().toString();
         }
 
         if(topic == null){

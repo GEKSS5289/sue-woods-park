@@ -4,11 +4,9 @@ import java.util.Date;
 import java.util.List;
 
 import com.sue.rabbit.producer.pojo.BrokerMessage;
-import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 
-@Mapper
 public interface BrokerMessageMapper {
 	
     int deleteByPrimaryKey(String messageId);
@@ -21,7 +19,6 @@ public interface BrokerMessageMapper {
 
     int updateByPrimaryKeySelective(BrokerMessage record);
 
-    int updateByPrimaryKeyWithBLOBs(BrokerMessage record);
 
     int updateByPrimaryKey(BrokerMessage record);
 	

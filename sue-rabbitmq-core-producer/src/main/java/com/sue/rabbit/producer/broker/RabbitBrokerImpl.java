@@ -2,15 +2,18 @@ package com.sue.rabbit.producer.broker;
 
 import com.sue.rabbit.constant.MessageType;
 import com.sue.rabbit.entity.Message;
-import com.sue.rabbit.producer.broker.AsyncBaseQueue;
-import com.sue.rabbit.producer.broker.RabbitBroker;
-import com.sue.rabbit.producer.broker.RabbitTemplateContainer;
+import com.sue.rabbit.producer.constant.BrokerMessageConst;
+import com.sue.rabbit.producer.constant.BrokerMessageStatus;
+import com.sue.rabbit.producer.pojo.BrokerMessage;
+import com.sue.rabbit.producer.service.MessageStoreService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.amqp.core.AmqpTemplate;
+import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.amqp.rabbit.connection.CorrelationData;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.Date;
 
 /**
  * @author sue
@@ -29,6 +32,8 @@ public class RabbitBrokerImpl implements RabbitBroker {
     private RabbitTemplateContainer rabbitTemplateContainer;
 
 
+    @Autowired
+    private MessageStoreService messageStoreService;
     /**
      * 迅速发消息 使用异步线程池发送消息
      * @param message
@@ -63,7 +68,18 @@ public class RabbitBrokerImpl implements RabbitBroker {
 
     @Override
     public void reliantSend(Message message) {
-
+        message.setMessageType(MessageType.RELIANT);
+        Date now = new Date();
+        BrokerMessage brokerMessage = new BrokerMessage();
+        brokerMessage.setMessageId(message.getMessageId());
+        brokerMessage.setStatus(BrokerMessageStatus.SENDING.getCode());
+        //try_count 在最开始不需要进行设置
+        brokerMessage.setNextRetry(DateUtils.addMinutes(now, BrokerMessageConst.TIMEOUT));
+        brokerMessage.setCreateTime(now);
+        brokerMessage.setUpdateTime(now);
+        brokerMessage.setMessage(message);
+        messageStoreService.insert(brokerMessage);
+        sendKernel(message);
     }
 
     @Override
