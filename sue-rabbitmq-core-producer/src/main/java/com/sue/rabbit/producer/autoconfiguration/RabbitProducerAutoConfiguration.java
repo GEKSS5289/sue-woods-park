@@ -1,5 +1,6 @@
 package com.sue.rabbit.producer.autoconfiguration;
 
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 /**
@@ -11,5 +12,6 @@ import org.springframework.context.annotation.Configuration;
  * 自动装配
  */
 @Configuration
+@ComponentScan(basePackages = {"com.sue"})
 public class RabbitProducerAutoConfiguration {
 }

@@ -1,10 +1,13 @@
 package com.sue.rabbit.producer.broker;
 
+import com.google.common.base.Preconditions;
 import com.sue.rabbit.api.producer.MessageProducer;
 import com.sue.rabbit.api.producer.SendCallback;
 import com.sue.rabbit.entity.Message;
 import com.sue.rabbit.exception.MessageRunTimeException;
-
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import com.sue.rabbit.constant.MessageType;
 import java.util.List;
 
 /**
@@ -12,7 +15,14 @@ import java.util.List;
  * @date 2020/8/15 17:08
  */
 
+@Component
 public class ProducerClient implements MessageProducer {
+
+
+    @Autowired
+    private RabbitBroker rabbitBroker;
+
+
     /**
      * 消息的发送 附带SendCallBack回调执行响应的业务逻辑处理
      *
@@ -34,6 +44,18 @@ public class ProducerClient implements MessageProducer {
     @Override
     public void send(Message message) throws MessageRunTimeException {
 
+        Preconditions.checkNotNull(message.getTopic());
+        String messageType = message.getMessageType();
+        switch (messageType){
+            case MessageType.RAPID:
+                break;
+            case MessageType.CONFIRM:
+                break;
+            case MessageType.RELIANT:
+                break;
+            default:
+                break;
+        }
     }
 
     /**
